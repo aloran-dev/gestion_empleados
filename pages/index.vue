@@ -211,6 +211,9 @@
         const index = this.employees.indexOf(item)
         this.employees.splice(index, 1)
         axios.delete(`http://dummy.restapiexample.com/api/v1/delete/${item.id}`)
+        this.text = `empleado ${item.employee_name} ¡eliminado!`
+        this.color = 'success'
+        this.snackbar = true
       },
 
       close () {
@@ -230,7 +233,7 @@
               "age": this.editedItem.employee_age,
             })
               .then(res => {
-                this.text = `¡usuario ${res.data.name} creado!`
+                this.text = `¡empleado ${res.data.name} creado!`
                 this.color = 'success'
                 this.snackbar = true
                 this.employees.push({
@@ -247,7 +250,7 @@
               "age": this.editedItem.employee_age,
             })
               .then(res => {
-                this.text = '¡usuario actualizado!'
+                this.text = '¡empleado actualizado!'
                 this.color = 'success'
                 this.snackbar = true
               })
