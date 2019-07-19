@@ -42,7 +42,12 @@
                     <v-text-field
                       v-model="editedItem.employee_name"
                       label="Nombre"
-                      :rules="nameRules"
+                      :rules="[
+          v => !!v || 'Este campo es requerido',
+          v => (/^[a-zA-Z]+$/.test(v)) || 'Tu nombre no debe contener numeros ni espacios',
+          v => (v && v.length <= 20) || 'Tu nombre no debe contener más de 20 caracteres',
+          v => (v && v.length >= 8) || 'Tu nombre debe contener más de 8 caracteres',
+        ]"
                       :counter="20"
                       required
                     ></v-text-field>
@@ -50,14 +55,24 @@
                   <v-flex xs6>
                     <v-text-field
                       v-model="editedItem.employee_salary"
-                      :rules="salaryRules"
+                      :rules="[
+          v => !!v || 'Este campo es requerido',
+          v => (/^[0-9]+([.][0-9]+)?/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
+          v => (v && v <= 20000) || 'Tu salario no debe ser mayor a 20000',
+          v => (v && v >= 8000) || 'Tu salario debe ser mayor a 8000',
+        ]"
                       label="Salario"
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs6>
                     <v-text-field
                       v-model="editedItem.employee_age"
-                      :rules="ageRules"
+                      :rules="[
+          v => !!v || 'Este campo es requerido',
+          v => (/^[0-9]+$/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
+          v => (v && v <= 35) || 'Tu edad no puede ser mayor a 35',
+          v => (v && v >= 18) || 'Debes tener más de 18 años para continuar',
+        ]"
                       label="Edad"
                     ></v-text-field>
                   </v-flex>
@@ -162,24 +177,6 @@
           employee_salary: '',
           employee_age: ''
         },
-        nameRules: [
-          v => !!v || 'Este campo es requerido',
-          v => (/^[a-zA-Z]+$/.test(v)) || 'Tu nombre no debe contener numeros ni espacios',
-          v => (v && v.length <= 20) || 'Tu nombre no debe contener más de 20 caracteres',
-          v => (v && v.length >= 8) || 'Tu nombre debe contener más de 8 caracteres'
-        ],
-        salaryRules: [
-          v => !!v || 'Este campo es requerido',
-          v => (/^[0-9]+([.][0-9]+)?/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
-          v => (v && v <= 20000) || 'Tu salario no debe ser mayor a 20000',
-          v => (v && v >= 8000) || 'Tu salario debe ser mayor a 8000'
-        ],
-        ageRules: [
-          v => !!v || 'Este campo es requerido',
-          v => (/^[0-9]+$/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
-          v => (v && v <= 35) || 'Tu edad no puede ser mayor a 35',
-          v => (v && v >= 18) || 'Debes tener más de 18 años para continuar'
-        ],
         snackbar: false,
         color: '',
         mode: '',
