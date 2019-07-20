@@ -28,7 +28,6 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/vuelidate', ssr: false  }
   ],
 
   modules: [

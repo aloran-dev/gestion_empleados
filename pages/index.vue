@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-
     <v-toolbar
       flat
       color="white"
@@ -43,11 +42,11 @@
                       v-model="editedItem.employee_name"
                       label="Nombre"
                       :rules="[
-          v => !!v || 'Este campo es requerido',
-          v => (/^[a-zA-Z]+$/.test(v)) || 'Tu nombre no debe contener numeros ni espacios',
-          v => (v && v.length <= 20) || 'Tu nombre no debe contener más de 20 caracteres',
-          v => (v && v.length >= 8) || 'Tu nombre debe contener más de 8 caracteres',
-        ]"
+                        v => !!v || 'Este campo es requerido',
+                        v => (/^[a-zA-Z]+$/.test(v)) || 'Tu nombre no debe contener numeros ni espacios',
+                        v => (v && v.length <= 20) || 'Tu nombre no debe contener más de 20 caracteres',
+                        v => (v && v.length >= 8) || 'Tu nombre debe contener más de 8 caracteres',
+                      ]"
                       :counter="20"
                       required
                     ></v-text-field>
@@ -56,11 +55,11 @@
                     <v-text-field
                       v-model="editedItem.employee_salary"
                       :rules="[
-          v => !!v || 'Este campo es requerido',
-          v => (/^[0-9]+([.][0-9]+)?/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
-          v => (v && v <= 20000) || 'Tu salario no debe ser mayor a 20000',
-          v => (v && v >= 8000) || 'Tu salario debe ser mayor a 8000',
-        ]"
+                        v => !!v || 'Este campo es requerido',
+                        v => (/^[0-9]+([.][0-9]+)?/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
+                        v => (v && v <= 20000) || 'Tu salario no debe ser mayor a 20000',
+                        v => (v && v >= 8000) || 'Tu salario debe ser mayor a 8000',
+                      ]"
                       label="Salario"
                     ></v-text-field>
                   </v-flex>
@@ -68,11 +67,11 @@
                     <v-text-field
                       v-model="editedItem.employee_age"
                       :rules="[
-          v => !!v || 'Este campo es requerido',
-          v => (/^[0-9]+$/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
-          v => (v && v <= 35) || 'Tu edad no puede ser mayor a 35',
-          v => (v && v >= 18) || 'Debes tener más de 18 años para continuar',
-        ]"
+                        v => !!v || 'Este campo es requerido',
+                        v => (/^[0-9]+$/.test(v)) || 'Por favor ingresa solo numeros sin espacios',
+                        v => (v && v <= 35) || 'Tu edad no puede ser mayor a 35',
+                        v => (v && v >= 18) || 'Debes tener más de 18 años para continuar',
+                      ]"
                       label="Edad"
                     ></v-text-field>
                   </v-flex>
@@ -153,9 +152,12 @@
   export default {
     async asyncData () {
       const { data } = await axios.get('http://dummy.restapiexample.com/api/v1/employees')
+
       return {
         dialog: false,
         valid: false,
+
+        // cabecera de tabla
         headers: [
           { text: 'ID', value: 'id' },
           { text: 'Nombre', value: 'employee_name' },
@@ -164,6 +166,8 @@
           { text: 'Acciones', value: 'name', sortable: false }
         ],
         employees: data,
+
+        // datos de empleado
         editedIndex: -1,
         editedItem: {
           id: '',
@@ -177,6 +181,8 @@
           employee_salary: '',
           employee_age: ''
         },
+
+        // snackbar
         snackbar: false,
         color: '',
         mode: '',
@@ -186,6 +192,7 @@
     },
 
     computed: {
+      // dependiendo de si existe el empleado en la lista se elige el titulo del modal
       formTitle () {
         return this.editedIndex === -1 ? 'Agregar nuevo empleado' : 'Editar empleado'
       }
@@ -222,7 +229,10 @@
       },
 
       save () {
+        // si el formulario es valido, ejecuta el codigo
         if (this.$refs.form.validate()) {
+
+          // si editedIndex es "-1", significa que no existe el usuario asi que manda la peticion post
           if (this.editedIndex === -1) {
             axios.post('http://dummy.restapiexample.com/api/v1/create', {
               "name": this.editedItem.employee_name,
@@ -240,6 +250,8 @@
                   "employee_age": res.data.age
                 })
               })
+
+            // si editedIndex es diferente a "-1", significa existe el usuario asi que manda la peticion put
           } else {
             axios.put(`http://dummy.restapiexample.com/api/v1/update/${this.editedItem.id}`, {
               "name": this.editedItem.employee_name,
@@ -254,7 +266,7 @@
             this.employees.splice(this.editedIndex, 1, this.editedItem)
           }
 
-          this.close()
+          this.close() // cierra modal
         }
       }
     }
